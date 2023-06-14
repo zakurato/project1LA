@@ -31,6 +31,7 @@ namespace project1LA.Controllers
 
         public ActionResult Create(UserDTO user)
         {
+            TempData["creado"] = "El usuario se creo correctamente";
             string result = userRepository.InsertUser(user);
             return RedirectToAction("index");
 
@@ -63,6 +64,8 @@ namespace project1LA.Controllers
 
             if (result == "Success")
             {
+                TempData["Eliminado"] = "El usuario se elimino correctamente";
+
                 // Elimina el usuario correctamente
                 return RedirectToAction("Index"); 
             }
@@ -87,6 +90,7 @@ namespace project1LA.Controllers
 
             if (result == "Success")
             {
+                TempData["actualizado"] = "El usuario se edito correctamente";
                 // Elimina el usuario correctamente
                 return RedirectToAction("Index");
             }

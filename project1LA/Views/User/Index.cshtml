@@ -4,6 +4,20 @@
 }
 
 <h2>List User</h2>
+<br />
+
+<div class="success-message">
+    @TempData["creado"]
+</div>
+<div class="success-message">
+    @TempData["eliminado"]
+</div>
+<div class="success-message">
+    @TempData["actualizado"]
+</div>
+
+<br />
+<br />
 
 <a href="@Url.Action("Create","User")">Create</a>
 
@@ -19,13 +33,13 @@
     <tbody>
         @foreach (var user in Model)
         {
-        <tr>
-            <td> @user.Id</td>
-            <td> @user.Name</td>
-            <td> @user.Email</td>
-            <td><a href="@Url.Action("EditForm","User", new { id = user.Id})">Edit</a></td>
-            <td><a href="@Url.Action("Delete","User", new { id = user.Id})">Delete</a></td>
-        </tr>
+            <tr>
+                <td> @user.Id</td>
+                <td> @user.Name</td>
+                <td> @user.Email</td>
+                <td><a href="@Url.Action("EditForm","User", new { id = user.Id})">Edit</a></td>
+                <td><a href="@Url.Action("Delete","User", new { id = user.Id})">Delete</a></td>
+            </tr>
         }
     </tbody>
 </table>

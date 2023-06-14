@@ -86,9 +86,41 @@ namespace project1LA.Models.DAO
             return null; 
         }
 
+
+
+
+
         public string DeleteUser(UserDTO user, int id)
         {
-            return null;
+            string response = "Failed";
+
+            try
+            {
+                using (MySqlConnection connection = Config.GetConnection())
+                {
+                    connection.Open();
+
+                    string deleteQuery = "DELETE FROM Users WHERE id = @id";
+
+                    using (MySqlCommand command = new MySqlCommand(deleteQuery, connection))
+                    {
+                        command.Parameters.AddWithValue("@id", user.Id);
+
+                        int rowsAffected = command.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            response = "Success";
+                        }
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
+
+            return response;
         }
     }
 }

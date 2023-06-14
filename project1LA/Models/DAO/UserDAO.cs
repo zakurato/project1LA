@@ -90,7 +90,7 @@ namespace project1LA.Models.DAO
 
 
 
-        public string DeleteUser(UserDTO user, int id)
+        public string DeleteUser(UserDTO user)
         {
             string response = "Failed";
 

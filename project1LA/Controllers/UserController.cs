@@ -11,8 +11,7 @@ namespace project1LA.Controllers
     public class UserController : Controller
     {
 
-
-        private UserDAO userRepository = new UserDAO();
+        private UserDAO userRepository = new UserDAO(); //variable que se usa para poder llamar a la funcion del modelo
 
 
         // GET: User
@@ -33,6 +32,23 @@ namespace project1LA.Controllers
             string result = userRepository.InsertUser(user);
             return RedirectToAction("index");
 
+        }
+
+        public ActionResult Delete(int id)
+        {
+            var userDelete = new UserDTO { Id = id };
+            string result = userRepository.DeleteUser(userDelete);
+
+            if (result == "Success")
+            {
+                // Elimina el usuario correctamente
+                return RedirectToAction("Index"); 
+            }
+            else
+            {
+                // Ocurrió un error al eliminar el usuario
+                return Content("El usuario no se elimino correctamente");
+            }
         }
     }
 }

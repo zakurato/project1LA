@@ -34,6 +34,22 @@ namespace project1LA.Controllers
 
         }
 
+        public ActionResult EditForm(int id)
+        {
+            var userUpdate = userRepository.UpdateUserForm(new UserDTO { Id = id });
+
+            if (userUpdate != null)
+            {
+                // Pasar el objeto UserDTO a la vista
+                return View(userUpdate);
+            }
+            else
+            {
+                return Content("El usuario no se editó correctamente");
+            }
+        }
+
+
         public ActionResult Delete(int id)
         {
             var userDelete = new UserDTO { Id = id };

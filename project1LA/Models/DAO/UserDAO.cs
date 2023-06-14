@@ -81,10 +81,48 @@ namespace project1LA.Models.DAO
         }
 
 
-        public string UpdateUser(UserDTO user, int id)
+        public UserDTO UpdateUserForm(UserDTO user)
         {
-            return null; 
+            UserDTO updatedUser = null;
+
+            try
+            {
+                using (MySqlConnection connection = Config.GetConnection())
+                {
+                    connection.Open();
+
+                    string selectQuery = "SELECT * FROM Users WHERE id = @id";
+
+                    using (MySqlCommand command = new MySqlCommand(selectQuery, connection))
+                    {
+                        command.Parameters.AddWithValue("@id", user.Id);
+
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                updatedUser = new UserDTO
+                                {
+                                    Id = reader.GetInt32("id"),
+                                    Name = reader.GetString("name"),
+                                    Email = reader.GetString("email"),
+                                    // Aquí debes asignar los demás atributos del objeto UserDTO
+                                    // utilizando los valores del reader correspondientes
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
+
+            return updatedUser;
         }
+
+
 
 
 

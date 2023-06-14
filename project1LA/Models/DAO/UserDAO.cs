@@ -9,6 +9,8 @@ namespace project1LA.Models.DAO
 {
     public class UserDAO
     {
+
+        //Insertar usuarios
         public string InsertUser(UserDTO user)
         {
             string response = "Failed";
@@ -35,19 +37,19 @@ namespace project1LA.Models.DAO
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Console.WriteLine("Error: "+ex.Message);
+                Console.WriteLine("Error: " + ex.Message);
             }
 
             return response;
         }
 
+
+        //Mostrar usuarios
         public List<UserDTO> ReadUsers()
         {
-
-             List<UserDTO> users = new List<UserDTO>();
-
+            List<UserDTO> users = new List<UserDTO>();
             try
             {
                 using (MySqlConnection connection = Config.GetConnection())
@@ -80,8 +82,8 @@ namespace project1LA.Models.DAO
             return users;
         }
 
-
-        public UserDTO UpdateUserForm(UserDTO user)
+        //Buscar usuario para mandarlo al formulario y luego editarlo
+        public UserDTO UpdateUserForm(string id)
         {
             UserDTO updatedUser = null;
 
@@ -95,7 +97,7 @@ namespace project1LA.Models.DAO
 
                     using (MySqlCommand command = new MySqlCommand(selectQuery, connection))
                     {
-                        command.Parameters.AddWithValue("@id", user.Id);
+                        command.Parameters.AddWithValue("@id", id);
 
                         using (MySqlDataReader reader = command.ExecuteReader())
                         {
@@ -106,8 +108,6 @@ namespace project1LA.Models.DAO
                                     Id = reader.GetInt32("id"),
                                     Name = reader.GetString("name"),
                                     Email = reader.GetString("email"),
-                                    // Aquí debes asignar los demás atributos del objeto UserDTO
-                                    // utilizando los valores del reader correspondientes
                                 };
                             }
                         }
@@ -123,12 +123,8 @@ namespace project1LA.Models.DAO
         }
 
 
-
-
-
-
-
-        public string DeleteUser(UserDTO user)
+        //Eliminar usuario
+        public string DeleteUser(string id)
         {
             string response = "Failed";
 
@@ -142,7 +138,7 @@ namespace project1LA.Models.DAO
 
                     using (MySqlCommand command = new MySqlCommand(deleteQuery, connection))
                     {
-                        command.Parameters.AddWithValue("@id", user.Id);
+                        command.Parameters.AddWithValue("@id", id);
 
                         int rowsAffected = command.ExecuteNonQuery();
 
@@ -160,5 +156,42 @@ namespace project1LA.Models.DAO
 
             return response;
         }
+
+        //Editar el usuario
+        public string StoreUpdate(string name, string email, string id)
+        {
+            string response = "Failed";
+
+            try
+            {
+                using (MySqlConnection connection = Config.GetConnection())
+                {
+                    connection.Open();
+
+                    string updateQuery = "UPDATE Users SET name = @name, email = @email WHERE id = @id";
+
+                    using (MySqlCommand command = new MySqlCommand(updateQuery, connection))
+                    {
+                        command.Parameters.AddWithValue("@name", name);
+                        command.Parameters.AddWithValue("@email", email);
+                        command.Parameters.AddWithValue("@id", id);
+
+                        int rowsAffected = command.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            response = "Success";
+                        }
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
+
+            return response;
+        }
+
     }
 }

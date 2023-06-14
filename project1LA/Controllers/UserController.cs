@@ -11,7 +11,7 @@ namespace project1LA.Controllers
     public class UserController : Controller
     {
 
-        private UserDAO userRepository = new UserDAO(); //variable que se usa para poder llamar a la funcion del modelo
+        private UserDAO userRepository = new UserDAO(); //variable que se usa para poder llamar a las funciones del modelo
 
 
         // GET: User
@@ -19,12 +19,14 @@ namespace project1LA.Controllers
         {
             return View(userRepository.ReadUsers());
         }
-
+        //Form Crear usuario
         public ActionResult Create()
         {
             return View();
         }
 
+
+        //Store guardar usuario
         [HttpPost]
 
         public ActionResult Create(UserDTO user)
@@ -34,13 +36,15 @@ namespace project1LA.Controllers
 
         }
 
+        //Form editar usuario
         public ActionResult EditForm(int id)
-        {
-            var userUpdate = userRepository.UpdateUserForm(new UserDTO { Id = id });
+        { 
+            string userEdit = id.ToString();
+
+            var userUpdate = userRepository.UpdateUserForm(userEdit);
 
             if (userUpdate != null)
             {
-                // Pasar el objeto UserDTO a la vista
                 return View(userUpdate);
             }
             else
@@ -49,11 +53,13 @@ namespace project1LA.Controllers
             }
         }
 
-
+        //Eliminar usuario
         public ActionResult Delete(int id)
         {
-            var userDelete = new UserDTO { Id = id };
-            string result = userRepository.DeleteUser(userDelete);
+
+            string idUserDelete = id.ToString();
+
+            string result = userRepository.DeleteUser(idUserDelete);
 
             if (result == "Success")
             {
@@ -65,6 +71,31 @@ namespace project1LA.Controllers
                 // Ocurrió un error al eliminar el usuario
                 return Content("El usuario no se elimino correctamente");
             }
+        }
+
+
+        //Store editar usuario
+        [HttpPost]
+
+        public ActionResult storeUpdate(FormCollection form)
+        {
+            string name = form["name"];
+            string email = form["email"];
+            string id = form["id"];
+
+            string result = userRepository.StoreUpdate( name, email, id);
+
+            if (result == "Success")
+            {
+                // Elimina el usuario correctamente
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                // Ocurrió un error al eliminar el usuario
+                return Content("El usuario no se elimino correctamente");
+            }
+
         }
     }
 }

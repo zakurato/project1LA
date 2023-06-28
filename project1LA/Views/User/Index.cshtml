@@ -3,43 +3,55 @@
     ViewBag.Title = "Index";
 }
 
-<h2>List User</h2>
-<br />
+@if (Session["role"].ToString() == "ADMIN")
+{
 
-<div class="success-message">
-    @TempData["creado"]
-</div>
-<div class="success-message">
-    @TempData["eliminado"]
-</div>
-<div class="success-message">
-    @TempData["actualizado"]
-</div>
+    <h2>List User</h2>
+    <br />
 
-<br />
-<br />
+    <div class="success-message">
+        @TempData["creado"]
+    </div>
+    <div class="success-message">
+        @TempData["eliminado"]
+    </div>
+    <div class="success-message">
+        @TempData["actualizado"]
+    </div>
 
-<a href="@Url.Action("Create","User")">Create</a>
+    <br />
+    <br />
 
-<table class="table">
+    <a href="@Url.Action("Create","User")">Create</a>
 
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Email</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model)
-        {
+    <table class="table">
+
+        <thead>
             <tr>
-                <td> @user.Id</td>
-                <td> @user.Name</td>
-                <td> @user.Email</td>
-                <td><a href="@Url.Action("EditForm","User", new { id = user.Id})">Edit</a></td>
-                <td><a href="@Url.Action("Delete","User", new { id = user.Id})">Delete</a></td>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Email</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td> @user.Id</td>
+                    <td> @user.Name</td>
+                    <td> @user.Email</td>
+                    <td><a href="@Url.Action("EditForm","User", new { id = user.Id})">Edit</a></td>
+                    <td><a href="@Url.Action("Delete","User", new { id = user.Id})">Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+else
+{
+
+    //tengo que crear el nuevo role en la tabla de roles y en el roleUsuario debo guardar el role y el usuario
+<h1>    mal</h1>
+}
+

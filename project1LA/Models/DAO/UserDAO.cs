@@ -11,7 +11,7 @@ namespace project1LA.Models.DAO
     {
 
         //Insertar usuarios
-        public string InsertUser(UserDTO user)
+        public string InsertUser(string name, string email)
         {
             string response = "Failed";
 
@@ -25,8 +25,8 @@ namespace project1LA.Models.DAO
 
                     using (MySqlCommand command = new MySqlCommand(insertQuery, connection))
                     {
-                        command.Parameters.AddWithValue("@name", user.Name);
-                        command.Parameters.AddWithValue("@email", user.Email);
+                        command.Parameters.AddWithValue("@name", name);
+                        command.Parameters.AddWithValue("@email", email);
 
                         int rowsAffected = command.ExecuteNonQuery();
 

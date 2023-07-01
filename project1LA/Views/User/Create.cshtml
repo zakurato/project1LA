@@ -1,10 +1,10 @@
-﻿
-@model project1LA.Models.DTO.UserDTO
+﻿@model List<project1LA.Models.Roles>
 @{
     ViewBag.Title = "Create";
 }
 
 <h2>Create new user</h2>
+
 
 <h2> Usual way</h2>
 <div>
@@ -14,6 +14,17 @@
             <input type="text" name="name" class="form-control" />
             <label>Email:</label>
             <input type="text" name="email" class="form-control" />
+            <br />
+            <select class="form-control" aria-label="Default select example" name="rol">
+                <option value="">Seleccione un rol</option>
+                @foreach (var item in Model)
+                {
+                    <option value="@item.Description">@item.Description</option>
+                }
+            </select>
+            <div class="success-message">
+                @TempData["rolRequerido"]
+            </div>
         </div>
 
 

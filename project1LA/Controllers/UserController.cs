@@ -26,7 +26,7 @@ namespace project1LA.Controllers
 
             //get an specific user (5)
             List<UserDTO> users = userRepository.ReadUsers();
-            UserDTO user = (from u in users where u.Id == 3 select u).First();
+            UserDTO user = (from u in users where u.Id == 25 select u).First();
             RolesUsuario ru = _db.RolesUsuario.Where(x=> x.IdUser == user.Id).FirstOrDefault();
             //get role // name
             Session["role"] = _db.Roles.Where(x=> x.Id == ru.IdRole).FirstOrDefault().Description;
@@ -37,18 +37,48 @@ namespace project1LA.Controllers
         //Form Crear usuario
         public ActionResult Create()
         {
-            return View();
+            var roles = _db.Roles.ToList();//envio los roles por la vista   
+            return View(roles);
         }
 
 
         //Store guardar usuario
         [HttpPost]
 
-        public ActionResult Create(UserDTO user)
+        public ActionResult Create(FormCollection form)
         {
-            TempData["creado"] = "El usuario se creo correctamente";
-            string result = userRepository.InsertUser(user); 
-            return RedirectToAction("index");
+
+            string name = form["name"];
+            string email = form["email"];
+            string rol = form["rol"];
+
+            if(rol == "")
+            {
+                TempData["rolRequerido"] = "Debe seleccionar un roll";
+                return RedirectToAction("Create");
+
+            }
+            else
+            {
+
+                List<UserDTO> users = userRepository.ReadUsers();//tabla de usuarios
+                var UsersLast = users.LastOrDefault();//busco el ultimo usuario 
+                var idUserIdLast = UsersLast.Id;// obtengo el id del ultimo usuario
+
+                string result = userRepository.InsertUser(name, email);
+
+                var idUserRoleCreate = _db.Roles.Where(x => x.Description == rol).First();//busco el id del roll que selecciono
+
+                TempData["creado"] = "El usuario se creo correctamente";
+                RolesUsuario ru = new RolesUsuario(); //creo un nuevo objeto RolesUsuario
+                ru.IdUser = idUserIdLast + 1;//le sumo 1 ya que va ser el nuevo id usuario
+                ru.IdRole = idUserRoleCreate.Id; //le guardo el id del roll
+
+                _db.RolesUsuario.Add(ru);
+                _db.SaveChanges();
+
+                return RedirectToAction("index");
+            }
 
         }
 

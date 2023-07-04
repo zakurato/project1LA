@@ -18,4 +18,5 @@ INSERT INTO RolesUsuario values (1,5);
 INSERT INTO RolesUsuario values (2,3);
 
 
+
 select * from RolesUsuario;

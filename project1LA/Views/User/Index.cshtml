@@ -29,6 +29,7 @@
         <thead>
             <tr>
                 <th>Id</th>
+                <th>Role</th>
                 <th>Name</th>
                 <th>Email</th>
             </tr>
@@ -36,8 +37,10 @@
         <tbody>
             @foreach (var user in Model)
             {
+                
                 <tr>
-                    <td> @user.Id</td>
+                    <td><a href="#" onclick="getRol(@user.Id)">@user.Id</a></td>
+                    <td id="role_@user.Id"></td>       
                     <td> @user.Name</td>
                     <td> @user.Email</td>
                     <td><a href="@Url.Action("EditForm","User", new { id = user.Id})">Edit</a></td>
@@ -55,3 +58,29 @@ else
 <h1>    mal</h1>
 }
 
+
+
+<script src="https://ajax.aspnetCDN.com/ajax/jQuery/jQuery-3.3.1.min.js"></script>
+
+<script>
+
+        function getRol(idUser) {
+
+            var idRol = idUser;
+            //console.log(idRol);
+
+            $.ajax({
+                url: "@Url.Action("getRole")",
+                type: "GET",
+                data: { id: idRol },
+                success: function (response) {
+                    console.log(response);
+                    // Actualizar el contenido del contenedor con los datos obtenidos
+                    $('#role_' + idUser).text(response);
+                    
+                },
+
+            });
+        };
+
+</script>
